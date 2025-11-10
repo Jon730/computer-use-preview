@@ -137,3 +137,4 @@ The `main.py` script is the command-line interface (CLI) for running the browser
 | GEMINI_API_KEY | Your API key for the Gemini model. | Yes |
 | BROWSERBASE_API_KEY | Your API key for Browserbase. | Yes (when using the browserbase environment) |
 | BROWSERBASE_PROJECT_ID | Your Project ID for Browserbase. | Yes (when using the browserbase environment) |
+
