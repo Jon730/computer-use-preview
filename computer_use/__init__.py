@@ -13,7 +13,7 @@
 # limitations under the License.
 from .computer import Computer, EnvState
 from .browserbase.browserbase import BrowserbaseComputer
-from .playwright.playwright import PlaywrightComputer
+from .play.playwright import PlaywrightComputer
 
 __all__ = [
     "Computer",

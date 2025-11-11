@@ -1,0 +1,34 @@
+[project]
+name = "computer-use"
+version = "0.1.0"
+description = "Build from google-gemini/computer-use-preview"
+authors = [
+    {name = "Jonathan Aldwinckle",email = "jon@triple-prime.com"}
+]
+license = "Apache-2.0"
+license-files = [
+    "LICENSE"
+]
+readme = "README.md"
+# Poetry assumes the package name is the same as the folder name (computer_use).
+packages = [
+    { include = "computer_use" } 
+]
+
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic (>=2.12.4,<3.0.0)",
+    "termcolor (>=3.2.0,<4.0.0)",
+    "rich (>=14.2.0,<15.0.0)",
+    "playwright (>=1.55.0,<2.0.0)",
+    "browserbase (>=1.4.0,<2.0.0)",
+    "google-auth (>=2.43.0,<3.0.0)",
+    "google-genai (>=1.49.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+

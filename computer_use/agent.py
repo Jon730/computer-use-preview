@@ -11,9 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import json
 import os
+from pathlib import Path
 from typing import Literal, Optional, Union, Any
+
+
 from google import genai
+from google.auth import impersonated_credentials
+from google.auth.exceptions import RefreshError
+from google.auth.transport.requests import Request
 from google.genai import types
 import termcolor
 from google.genai.types import (
@@ -28,7 +35,8 @@ import time
 from rich.console import Console
 from rich.table import Table
 
-from computers import EnvState, Computer
+
+from computer_use import EnvState, Computer
 
 MAX_RECENT_TURN_WITH_SCREENSHOTS = 3
 PREDEFINED_COMPUTER_USE_FUNCTIONS = [
@@ -73,7 +81,28 @@ class BrowserAgent:
         self._model_name = model_name
         self._verbose = verbose
         self.final_reasoning = None
+        scopes = ['https://www.googleapis.com/auth/cloud-platform']
+        # google.auth.default() will automatically find and parse the ADC file.
+        # If it's an impersonation config, it returns an ImpersonatedCredentials object.
+        with open(Path.home() / ".config/gcloud/application_default_credentials.json", 'r') as credsjson:
+            info = json.load(credsjson)
+        credentials = impersonated_credentials.Credentials.from_impersonated_service_account_info(info, scopes=scopes)
+        try:
+            credentials._source_credentials.refresh(Request())
+        except RefreshError as err:
+            if "Reauthentication is " in str(err):
+                termcolor.cprint(
+                    "Your Application Default Credentials have expired."
+                    " Please run:\n\t"
+                    "`gcloud auth application-default login --impersonate-service-account=$SA_EMAIL`"
+                    " to refresh them.",
+                    color="red",
+                )
+                exit(1)
+            raise err
+
         self._client = genai.Client(
+            credentials=credentials,
             api_key=os.environ.get("GEMINI_API_KEY"),
             vertexai=os.environ.get("USE_VERTEXAI", "0").lower() in ["true", "1"],
             project=os.environ.get("VERTEXAI_PROJECT"),
@@ -111,7 +140,7 @@ class BrowserAgent:
                         excluded_predefined_functions=excluded_predefined_functions,
                     ),
                 ),
-                types.Tool(function_declarations=custom_functions),
+                #types.Tool(function_declarations=custom_functions),
             ],
         )
 

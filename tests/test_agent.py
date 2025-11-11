@@ -16,8 +16,8 @@ import os
 import unittest
 from unittest.mock import MagicMock, patch
 from google.genai import types
-from agent import BrowserAgent, multiply_numbers
-from computers import EnvState
+from computer_use.agent import BrowserAgent, multiply_numbers
+from computer_use import EnvState
 
 class TestBrowserAgent(unittest.TestCase):
     def setUp(self):

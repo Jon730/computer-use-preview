@@ -13,7 +13,7 @@
 # limitations under the License.
 import os
 import termcolor
-from ..playwright.playwright import PlaywrightComputer
+from ..play.playwright import PlaywrightComputer
 import browserbase
 from playwright.sync_api import sync_playwright
 

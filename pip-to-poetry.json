@@ -1,0 +1,14 @@
+{
+    "repo::computer-use-preview": {
+        "pip_venv_path": "./.venv3.12",
+        "packages_path": "./",
+        "package_names": [
+            "computer-use"
+        ],
+        "packages": {
+            "name::computer-use": {
+                "abbreviation": ""
+            }
+        }
+    }
+}

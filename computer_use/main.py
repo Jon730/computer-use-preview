@@ -14,8 +14,8 @@
 import argparse
 import os
 
-from agent import BrowserAgent
-from computers import BrowserbaseComputer, PlaywrightComputer
+from computer_use.agent import BrowserAgent
+from computer_use import BrowserbaseComputer, PlaywrightComputer
 
 
 PLAYWRIGHT_SCREEN_SIZE = (1440, 900)

@@ -14,7 +14,7 @@
 
 import unittest
 from unittest.mock import patch, MagicMock
-import main
+import computer_use.main as main
 
 class TestMain(unittest.TestCase):
 
