@@ -15,14 +15,14 @@ packages = [
     { include = "computer_use" } 
 ]
 
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "pydantic (>=2.12.4,<3.0.0)",
     "termcolor (>=3.2.0,<4.0.0)",
     "rich (>=14.2.0,<15.0.0)",
     "playwright (>=1.55.0,<2.0.0)",
     "browserbase (>=1.4.0,<2.0.0)",
-    "google-auth (>=2.43.0,<3.0.0)",
+    "google-auth (==2.41.1)",
     "google-genai (>=1.49.0,<2.0.0)"
 ]
 
@@ -32,3 +32,12 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 
+
+[tool.poetry.group.local.dependencies]
+dynamics-scripts = {develop = true}
+
+
+[dependency-groups]
+local = [
+    "dynamics-scripts @ file:///workspaces/github/dynamics-reusable-actions/project/packages/ds"
+]
