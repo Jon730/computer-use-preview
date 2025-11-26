@@ -15,8 +15,10 @@ import json
 import os
 from pathlib import Path
 from typing import Literal, Optional, Union, Any
+import time
 
 
+# third party imports
 from google import genai
 from google.auth import impersonated_credentials
 from google.auth.exceptions import RefreshError
@@ -31,12 +33,15 @@ from google.genai.types import (
     FunctionResponse,
     FinishReason,
 )
-import time
 from rich.console import Console
 from rich.table import Table
 
+
+# first party imports
+from dynamics_scripts import getLogger
 from dynamics_scripts.get import ClientType, SecretTriplePrimeGcloud
 from computer_use import EnvState, Computer
+from computer_use.play.playwright import PlaywrightComputer
 
 MAX_RECENT_TURN_WITH_SCREENSHOTS = 3
 PREDEFINED_COMPUTER_USE_FUNCTIONS = [
@@ -56,6 +61,7 @@ PREDEFINED_COMPUTER_USE_FUNCTIONS = [
 ]
 
 
+lg = getLogger(__name__)
 console = Console()
 
 # Built-in Computer Use tools will return "EnvState".
@@ -237,6 +243,7 @@ class BrowserAgent:
                     contents=self._contents,
                     config=self._generate_content_config,
                 )
+                lg.log_cost(response, self._model_name)
                 return response  # Return response on success
             except Exception as e:
                 print(e)
@@ -448,3 +455,22 @@ class BrowserAgent:
 
     def denormalize_y(self, y: int) -> int:
         return int(y / 1000 * self._browser_computer.screen_size()[1])
+
+
+if __name__ == "__main__":
+    from computer_use.prompt import (
+        initial_url, prompt as query, highlight_mouse, model_name as model,
+        PLAYWRIGHT_SCREEN_SIZE
+    )
+    env = PlaywrightComputer(
+        screen_size=PLAYWRIGHT_SCREEN_SIZE,
+        initial_url=initial_url,
+        highlight_mouse=highlight_mouse,
+    )
+    with env as browser_computer:
+        agent = BrowserAgent(
+            browser_computer=browser_computer,
+            query=query,
+            model_name=model,
+        )
+        agent.agent_loop()
